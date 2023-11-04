@@ -17,9 +17,7 @@ mount --mkdir /dev/efi_system_partition /mnt/boot
 #Server = https://london.mirror.pkgbuild.com/$repo/os/$arch
 vim /etc/pacman.d/mirrorlist 
 vim /etc/pacman.conf #ParallelDownloads
-pacstrap -K /mnt \
- base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms \
- fish vim noto-fonts-{cjk,emoji,extra} xorg-{server,xinit,xrandr} gnome-shell alacritty
+pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit,xrandr} gnome-shell alacritty firefox code base-devel git clang mold rustup
 
 #config
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -52,4 +50,3 @@ exit
 umount -R /mnt
 reboot
 
-pacman -S firefox code base-devel git clang mold
