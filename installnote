@@ -1,0 +1,58 @@
+#network setting
+iwctl station device connect ssid
+
+#
+lsblk -f
+gdisk /dev/the_disk_to_be_partitioned
+mkfs.fat -F 32 /dev/efi_system_partition
+mkfs.xfs -f /dev/root_partition
+mount /dev/root_partition /mnt
+mount --mkdir /dev/efi_system_partition /mnt/boot
+
+#mirror
+## Worldwide
+#Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch
+## United Kingdom
+#Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
+#Server = https://london.mirror.pkgbuild.com/$repo/os/$arch
+vim /etc/pacman.d/mirrorlist 
+vim /etc/pacman.conf #ParallelDownloads
+pacstrap -K /mnt \
+ base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms \
+ fish vim base-devel git clang mold \
+ noto-fonts-{cjk,emoji,extra} xorg-{server,xinit} gnome-{shell,console,calculator} \
+ code nautilus file-roller firefox fcitx5-{im,chinese-addons}
+
+#config
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt fish
+chsh -s /bin/fish
+ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+ln -s /bin/vim /bin/vi
+cd /etc
+vi locale.gen #en_US.UTF-8 UTF-8
+locale-gen 
+vi locale.conf #LANG=en_US.UTF-8
+vi hostname
+vi mkinitcpio.conf #HOOKS kms
+mkinitcpio -P
+passwd
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+vi default/grub #timeout nvidia_drm.modeset=1
+grub-mkconfig -o /boot/grub/grub.cfg
+visudo
+useradd -mG wheel -s /bin/fish username
+passwd username
+vi pacman.conf #multilib paralleldownloads
+systemctl enable NetworkManager
+su username
+vi ~/.xinitrc
+# export XDG_SESSION_TYPE=x11
+# export GDK_BACKEND=x11
+# exec gnome-session
+exit
+umount -R /mnt
+reboot
+
+XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
+pacman -S arch-install-scripts
