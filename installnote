@@ -19,9 +19,7 @@ vim /etc/pacman.d/mirrorlist
 vim /etc/pacman.conf #ParallelDownloads
 pacstrap -K /mnt \
  base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms \
- fish vim base-devel git clang mold \
- noto-fonts-{cjk,emoji,extra} xorg-{server,xinit} gnome-{shell,console,calculator} \
- code nautilus file-roller firefox fcitx5-{im,chinese-addons}
+ fish vim noto-fonts-{cjk,emoji,extra} xorg-{server,xinit,xrandr} gnome-shell alacritty
 
 #config
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -38,7 +36,7 @@ vi mkinitcpio.conf #HOOKS kms
 mkinitcpio -P
 passwd
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-vi default/grub #timeout nvidia_drm.modeset=0 #if use wayland set it to 1
+vi default/grub #timeout
 grub-mkconfig -o /boot/grub/grub.cfg
 visudo
 useradd -mG wheel -s /bin/fish username
@@ -54,8 +52,4 @@ exit
 umount -R /mnt
 reboot
 
-#if use wayland
-XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
-
-
-pacman -S arch-install-scripts
+pacman -S firefox code base-devel git clang mold
