@@ -76,6 +76,10 @@ vi .cargo/config.toml
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
 
+#git
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
 #install paru
 cd /tmp
 git clone https://aur.archlinux.org/paru.git
