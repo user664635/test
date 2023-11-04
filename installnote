@@ -1,9 +1,7 @@
-#network setting
+#network connecting
 iwctl station device connect ssid
 
-#
-lsblk -f
-gdisk /dev/the_disk_to_be_partitioned
+#format & mount
 mkfs.fat -F 32 /dev/efi_system_partition
 mkfs.xfs -f /dev/root_partition
 mount /dev/root_partition /mnt
@@ -16,37 +14,80 @@ mount --mkdir /dev/efi_system_partition /mnt/boot
 #Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
 #Server = https://london.mirror.pkgbuild.com/$repo/os/$arch
 vim /etc/pacman.d/mirrorlist 
+
+#config pacman
 vim /etc/pacman.conf #ParallelDownloads
-pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit,xrandr} gnome-shell alacritty firefox code base-devel git clang mold rustup
+
+#install software
+pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr networkmanager nvidia-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit,xrandr} gnome-shell alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
+
+#
+genfstab -U /mnt >> /mnt/etc/fstab
+
+#switch to new root
+arch-chroot /mnt fish
+
+#set fish as default shell
+chsh -s /bin/fish
+
+#set localtime
+ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+
+#
+ln -s /bin/vim /bin/vi
 
 #config
-genfstab -U /mnt >> /mnt/etc/fstab
-arch-chroot /mnt fish
-chsh -s /bin/fish
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
-ln -s /bin/vim /bin/vi
 cd /etc
+
+#set language
 vi locale.gen #en_US.UTF-8 UTF-8
 locale-gen 
 vi locale.conf #LANG=en_US.UTF-8
+
+#set hostname
 vi hostname
+
+#for nvidia settings
 vi mkinitcpio.conf #HOOKS kms
 mkinitcpio -P
+
+#set passward
 passwd
+
+#config grub
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 vi default/grub #timeout
 grub-mkconfig -o /boot/grub/grub.cfg
+
+#add user
 visudo
 useradd -mG wheel -s /bin/fish username
 passwd username
+
+#config pacman
 vi pacman.conf #multilib paralleldownloads
+
+#enable networkmanager
 systemctl enable NetworkManager
+
+#config user
 su username
 vi ~/.xinitrc
 # export XDG_SESSION_TYPE=x11
 # export GDK_BACKEND=x11
 # exec gnome-session
-exit
+
+#install cargo
+rustup toolchain install nightly
+
+#install paru
+cd /tmp
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+
+#exit
 umount -R /mnt
+
 reboot
 
