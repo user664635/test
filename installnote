@@ -72,13 +72,19 @@ systemctl enable NetworkManager
 
 #config user
 su username
-vi ~/.xinitrc
+cd
+vi .xinitrc
 export XDG_SESSION_TYPE=x11
 export GDK_BACKEND=x11
 exec gnome-session
 
 #install cargo
 rustup toolchain install nightly
+vi .cargo/config.toml
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+
 
 #install paru
 cd /tmp
