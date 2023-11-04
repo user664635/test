@@ -38,7 +38,7 @@ vi mkinitcpio.conf #HOOKS kms
 mkinitcpio -P
 passwd
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-vi default/grub #timeout nvidia_drm.modeset=1
+vi default/grub #timeout nvidia_drm.modeset=0 #if use wayland set it to 1
 grub-mkconfig -o /boot/grub/grub.cfg
 visudo
 useradd -mG wheel -s /bin/fish username
@@ -54,5 +54,8 @@ exit
 umount -R /mnt
 reboot
 
+#if use wayland
 XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
+
+
 pacman -S arch-install-scripts
