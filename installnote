@@ -26,7 +26,7 @@ chsh -s /bin/fish
 passwd
 
 #set localtime
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ln -s /bin/vim /bin/vi
 
