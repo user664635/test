@@ -12,7 +12,7 @@ vim /etc/pacman.d/mirrorlist
 vim /etc/pacman.conf #ParallelDownloads
 
 #install software
-pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-{dkms,settings} fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-desktop alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
+pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-{open-dkms,settings} fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-desktop alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
