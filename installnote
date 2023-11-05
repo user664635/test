@@ -76,10 +76,6 @@ vi .cargo/config.toml
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
 
-#git
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-
 #config alacritty
 mkdir -p .config/alacritty/themes
 git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
@@ -87,7 +83,7 @@ vi .config/alacritty/alacritty.yml
 import:
  - .config/alacritty/themes/themes/tokyo-night-storm.yaml
 font:
- size:15
+ size: 15
 
 #install paru
 cd /tmp
@@ -113,4 +109,7 @@ clangd rust-analyzer tabout asm tokyo-night
 #install software
 yay -S opentabletdriver
 
+#git
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 
