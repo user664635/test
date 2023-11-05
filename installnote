@@ -22,6 +22,9 @@ arch-chroot /mnt fish
 #set fish as default shell
 chsh -s /bin/fish
 
+#set passward
+passwd
+
 #set localtime
 ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
 
@@ -41,9 +44,6 @@ vi hostname
 #for nvidia settings
 vi mkinitcpio.conf #HOOKS kms
 mkinitcpio -P
-
-#set passward
-passwd
 
 #config grub
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
@@ -92,4 +92,25 @@ paru -S nekoray sing-geo{site,ip}
 #exit
 umount -R /mnt
 reboot
+
+#user login
+
+#config nekoray
+sudo nekoray -many
+
+#install code extensions
+clangd rust-analyzer tabout asm tokyo-night
+
+#config alacritty
+mkdir -p .config/alacritty/themes
+git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
+vi .config/alacritty/alacritty.yml
+import:
+ - .config/alacritty/themes/themes/{theme}.yaml
+font:
+ size:14
+
+#install software
+yay -S opentabletdriver
+
 
