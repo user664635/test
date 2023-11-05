@@ -65,9 +65,8 @@ systemctl enable NetworkManager
 su username
 cd
 vi .xinitrc
-export XDG_SESSION_TYPE=x11
-export GDK_BACKEND=x11
-exec gnome-session
+export DESKTOP_SESSION=plasma
+exec startplasma-x11
 
 #install cargo
 rustup toolchain install nightly
