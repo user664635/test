@@ -95,6 +95,17 @@ makepkg -si
 #install software
 paru -S nekoray sing-geo{site,ip} nvidia-exec opentabletdriver
 
+#install code extensions
+code --install-extension llvm-vs-code-extensions.vscode-clangd
+code --install-extension rust-lang.rust-analyzer
+code --install-extension albert.TabOut
+code --install-extension maziac.asm-code-lens
+code --install-extension enkia.tokyo-night
+
+#git
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
 #exit
 umount -R /mnt
 reboot
@@ -103,11 +114,4 @@ reboot
 
 #config nekoray
 sudo nekoray -many
-
-#install code extensions
-clangd rust-analyzer tabout asm tokyo-night
-
-#git
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
 
