@@ -12,7 +12,7 @@ vim /etc/pacman.d/mirrorlist
 vim /etc/pacman.conf #ParallelDownloads
 
 #install software
-pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-{open-dkms,settings} fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-desktop alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
+pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms,settings fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -64,9 +64,6 @@ systemctl enable NetworkManager
 #config user
 su username
 cd
-vi .xinitrc
-export DESKTOP_SESSION=plasma
-exec startplasma-x11
 
 #install cargo
 rustup toolchain install nightly
@@ -99,6 +96,7 @@ umount -R /mnt
 reboot
 
 #user login
+XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
 
 #config nekoray
 sudo nekoray -many
@@ -107,7 +105,7 @@ sudo nekoray -many
 clangd rust-analyzer tabout asm tokyo-night
 
 #install software
-yay -S opentabletdriver
+paru -S opentabletdriver
 
 #git
 git config --global user.email "you@example.com"
