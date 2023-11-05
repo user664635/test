@@ -85,7 +85,7 @@ mkdir -p .config/alacritty/themes
 git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
 vi .config/alacritty/alacritty.yml
 import:
- - .config/alacritty/themes/themes/{theme}.yaml
+ - .config/alacritty/themes/themes/tokyo-night-storm.yaml
 font:
  size:15
 
