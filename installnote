@@ -36,7 +36,7 @@ cd /etc
 #set language
 vi locale.gen #en_US.UTF-8 UTF-8
 locale-gen 
-vi locale.conf #LANG=en_US.UTF-8
+echo "LANG=en_US.UTF-8" > locale.conf
 
 #set hostname
 vi hostname
@@ -82,6 +82,10 @@ import:
 font:
  size: 15
 
+#startx
+echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" > startx.sh
+chmod +x ./startx.sh
+
 #install paru
 cd /tmp
 git clone https://aur.archlinux.org/paru.git
@@ -96,7 +100,6 @@ umount -R /mnt
 reboot
 
 #user login
-XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
 
 #config nekoray
 sudo nekoray -many
