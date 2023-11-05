@@ -88,8 +88,8 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 
-#install nekoray
-paru -S nekoray sing-geo{site,ip}
+#install software
+paru -S nekoray sing-geo{site,ip} nvidia-exec opentabletdriver
 
 #exit
 umount -R /mnt
@@ -103,9 +103,6 @@ sudo nekoray -many
 
 #install code extensions
 clangd rust-analyzer tabout asm tokyo-night
-
-#install software
-paru -S opentabletdriver
 
 #git
 git config --global user.email "you@example.com"
