@@ -79,6 +79,7 @@
                 rustup toolchain install nightly
                 mkdir .cargo
                 vi .cargo/config.toml
+          
             add following things
       
                 [target.x86_64-unknown-linux-gnu]
@@ -89,15 +90,25 @@
                 mkdir -p .config/alacritty/themes
                 git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
                 vi .config/alacritty/alacritty.yml
+          
             add following things
           
               import:
-               - .config/alacritty/themes/themes/tokyo-night-storm.yaml
+                - .config/alacritty/themes/themes/tokyo-night-storm.yaml
               font:
-               size: 15
+                size: 12
 
-        - #### startx
-              echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" > startx.sh
+        - #### edit startx
+              vi startx.sh
+          
+          add following things
+          
+              XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
+              sudo nekoray -many
+              otd-daemon
+     
+          give executable permission
+          
               chmod +x ./startx.sh
 
         - #### install paru
@@ -126,9 +137,3 @@
     - #### exit
           umount -R /mnt
           reboot
-
-- ### user login
-      ./startx.sh
-
-- ### config software
-      sudo nekoray -many
