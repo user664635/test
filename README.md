@@ -2,126 +2,130 @@
 
 ## this is my note of archlinux install
 
-### network connecting
-    iwctl station device connect ssid
+- ### network connecting
+        iwctl station device connect ssid
 
-### format & mount
-    mkfs.fat -F 32 /dev/efi_system_partition
-    mkfs.xfs -f /dev/root_partition
-    mount /dev/root_partition /mnt
-    mount --mkdir /dev/efi_system_partition /mnt/boot
+- ### format & mount
+        mkfs.fat -F 32 /dev/efi_system_partition
+        mkfs.xfs -f /dev/root_partition
+        mount /dev/root_partition /mnt
+        mount --mkdir /dev/efi_system_partition /mnt/boot
 
-### config pacman
-    vim /etc/pacman.d/mirrorlist 
-    vim /etc/pacman.conf #ParallelDownloads
+- ### config pacman
+        vim /etc/pacman.d/mirrorlist 
+        vim /etc/pacman.conf
 
-### install software
-    pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons,mozc} code base-devel git clang mold rustup
+- ### install software
+        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons,mozc} code base-devel git clang mold rustup
 
-### genfstab
-    genfstab -U /mnt >> /mnt/etc/fstab
+- ### genfstab
+        genfstab -U /mnt >> /mnt/etc/fstab
 
-### switch to new root
-    arch-chroot /mnt fish
+- ### switch to new root
+        arch-chroot /mnt fish
 
-### set fish as default shell
-    chsh -s /bin/fish
+    - #### set fish as default shell
+            chsh -s /bin/fish
 
-### set passward
-    passwd
+    - #### set passward
+            passwd
 
-### set localtime
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+    - #### set localtime
+            ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-### create link to vim
-    ln -s /bin/vim /bin/vi
+    - #### create link to vim
+            ln -s /bin/vim /bin/vi
 
-### config
-    cd /etc
+    - #### enable networkmanager
+            systemctl enable NetworkManager
 
-### set language
-    vi locale.gen #en_US.UTF-8 UTF-8
-    locale-gen 
-    echo "LANG=en_US.UTF-8" > locale.conf
+    - #### config /etc
+            cd /etc
 
-### set hostname
-    echo archlinux > hostname
+        - #### set language
+          edit locale.gen and uncommit `en_US.UTF-8 UTF-8`
+          
+                vi locale.gen
+                locale-gen 
+                echo "LANG=en_US.UTF-8" > locale.conf
 
-### for nvidia settings
-    vi mkinitcpio.conf #HOOKS kms
-    mkinitcpio -P
+        - #### set hostname
+                echo archlinux > hostname
 
-### config grub
-    grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-    vi default/grub #timeout
-    grub-mkconfig -o /boot/grub/grub.cfg
+        - #### for nvidia settings
+          edit mkinitcpio.conf and remove `kms` from `HOOKS`
+          
+                vi mkinitcpio.conf 
+                mkinitcpio -P
 
-### add user
-    visudo
-    useradd -mG wheel -s /bin/fish username
-    passwd username
+        - #### install and config grub
+                grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+                vi default/grub
+                grub-mkconfig -o /boot/grub/grub.cfg
+          
+        - #### config pacman
+          uncommit `multilib` and `paralleldownloads`
+      
+                vi pacman.conf
 
-### config pacman
-    vi pacman.conf #multilib paralleldownloads
+    - #### add and config user
+          visudo
+          useradd -mG wheel -s /bin/fish username
+          passwd username
+          su username
+          cd
 
-### enable networkmanager
-    systemctl enable NetworkManager
+        - #### install cargo
+                rustup toolchain install nightly
+                mkdir .cargo
+                vi .cargo/config.toml
+            add following things
+      
+                [target.x86_64-unknown-linux-gnu]
+                linker = "clang"
+                rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
 
-### config user
-    su username
-    cd
+        - #### config alacritty
+                mkdir -p .config/alacritty/themes
+                git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
+                vi .config/alacritty/alacritty.yml
+            add following things
+          
+              import:
+               - .config/alacritty/themes/themes/tokyo-night-storm.yaml
+              font:
+               size: 15
 
-### install cargo
-    rustup toolchain install nightly
-    mkdir .cargo
-    vi .cargo/config.toml
-    
-#### add follow things
-    [target.x86_64-unknown-linux-gnu]
-    linker = "clang"
-    rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
+        - #### startx
+              echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" > startx.sh
+              chmod +x ./startx.sh
 
-### config alacritty
-    mkdir -p .config/alacritty/themes
-    git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
-    vi .config/alacritty/alacritty.yml
+        - #### install paru
+              cd /tmp
+              git clone https://aur.archlinux.org/paru.git
+              cd paru
+              makepkg -si
 
-#### add follow things
-    import:
-     - .config/alacritty/themes/themes/tokyo-night-storm.yaml
-    font:
-     size: 15
+        - #### install aur software
+              paru -S nekoray sing-geo{site,ip} nvidia-exec opentabletdriver
 
-### startx
-    echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" > startx.sh
-    chmod +x ./startx.sh
+        - #### install code extensions
+              code --install-extension llvm-vs-code-extensions.vscode-clangd
+              code --install-extension rust-lang.rust-analyzer
+              code --install-extension albert.TabOut
+              code --install-extension maziac.asm-code-lens
+              code --install-extension enkia.tokyo-night
 
-### install paru
-    cd /tmp
-    git clone https://aur.archlinux.org/paru.git
-    cd paru
-    makepkg -si
+        - #### git
+              git config --global user.email "you@example.com"
+              git config --global user.name "Your Name"
 
-### install software
-    paru -S nekoray sing-geo{site,ip} nvidia-exec opentabletdriver
+    - #### exit
+          umount -R /mnt
+          reboot
 
-### install code extensions
-    code --install-extension llvm-vs-code-extensions.vscode-clangd
-    code --install-extension rust-lang.rust-analyzer
-    code --install-extension albert.TabOut
-    code --install-extension maziac.asm-code-lens
-    code --install-extension enkia.tokyo-night
+- ### user login
+      ./startx.sh
 
-### git
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
-
-### exit
-    umount -R /mnt
-    reboot
-
-### user login
-    ./startx.sh
-
-### config nekoray
-    sudo nekoray -many
+- ### config nekoray
+      sudo nekoray -many
