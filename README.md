@@ -16,7 +16,7 @@
         vim /etc/pacman.conf
 
 - ### install software
-        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons,mozc} code base-devel git clang mold rustup
+        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-{shell,calculator} alacritty firefox fcitx5-{im,chinese-addons,mozc} code rnote base-devel git clang mold rustup
 
 - ### genfstab
         genfstab -U /mnt >> /mnt/etc/fstab
