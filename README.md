@@ -16,8 +16,9 @@
     vim /etc/pacman.conf #ParallelDownloads
 
 ### install software
-    pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons} code base-devel git clang mold rustup
+    pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-shell alacritty firefox fcitx5-{im,chinese-addons,mozc} code base-devel git clang mold rustup
 
+### genfstab
     genfstab -U /mnt >> /mnt/etc/fstab
 
 ### switch to new root
@@ -32,6 +33,7 @@
 ### set localtime
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+### create link to vim
     ln -s /bin/vim /bin/vi
 
 ### config
@@ -43,7 +45,7 @@
     echo "LANG=en_US.UTF-8" > locale.conf
 
 ### set hostname
-    vi hostname
+    echo archlinux > hostname
 
 ### for nvidia settings
     vi mkinitcpio.conf #HOOKS kms
@@ -73,7 +75,8 @@
     rustup toolchain install nightly
     mkdir .cargo
     vi .cargo/config.toml
-
+    
+#### add follow things
     [target.x86_64-unknown-linux-gnu]
     linker = "clang"
     rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
@@ -83,6 +86,7 @@
     git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
     vi .config/alacritty/alacritty.yml
 
+#### add follow things
     import:
      - .config/alacritty/themes/themes/tokyo-night-storm.yaml
     font:
@@ -117,6 +121,7 @@
     reboot
 
 ### user login
+    ./startx.sh
 
 ### config nekoray
     sudo nekoray -many
