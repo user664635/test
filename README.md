@@ -59,7 +59,9 @@
                 mkinitcpio -P
 
         - #### install and config grub
-                grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+                grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB   
+          edit grub and add `nvidia_drm.modeset=1 nvidia_drm.fbdev=1` to `GRUB_CMDLINE_LINUX_DEFAULT` then mkconfig
+          
                 vi default/grub
                 grub-mkconfig -o /boot/grub/grub.cfg
           
