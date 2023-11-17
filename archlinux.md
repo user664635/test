@@ -38,9 +38,9 @@
           grub-mkconfig -o /boot/grub/grub.cfg
           vi pacman.conf # uncommit multilib and paralleldownloads
           visudo
-          useradd -mG wheel -s /bin/fish username
-          passwd username
-          su username
+          useradd -mG wheel -s /bin/fish user
+          passwd user
+          su user
  
     - #### new user
           cd
