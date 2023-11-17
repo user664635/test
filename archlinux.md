@@ -10,7 +10,7 @@
       mount --mkdir /dev/efi_system_partition /mnt/boot
 
 - ### install software
-      pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish gvim base-devel git clang mold rustup xorg-{server,xinit} xfce4
+      pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish gvim base-devel git clang mold rustup xorg-{server,xinit} xfce4 firefox
   
 - ### genfstab
       genfstab -U /mnt >> /mnt/etc/fstab
