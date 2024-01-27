@@ -83,6 +83,7 @@
           passwd username
           su username
           cd
+          echo "export DESKTOP_SESSION=plasma & exec startplasma-x11" > .xinitrc
 
         - #### install cargo
                 rustup toolchain install nightly
