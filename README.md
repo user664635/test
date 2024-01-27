@@ -2,14 +2,20 @@
 
 ## this is my note of archlinux install
 
+- ### preparation
+  https://github.com/ventoy/Ventoy/releases
+  https://github.com/MatsuriDayo/nekoray/releases
+
 - ### network connecting
         iwctl station device connect ssid
 
 - ### format & mount
         mkfs.fat -F 32 /dev/efi_system_partition
         mkfs.xfs -f /dev/root_partition
+        mkswap /dev/swap_partition
         mount /dev/root_partition /mnt
         mount --mkdir /dev/efi_system_partition /mnt/boot
+        swapon /dev/swap_partition
 
 - ### config pacman
         vim /etc/pacman.d/mirrorlist 
