@@ -4,6 +4,7 @@
 
 - ### preparation
   https://github.com/ventoy/Ventoy/releases
+  
   https://github.com/MatsuriDayo/nekoray/releases
 
 - ### network connecting
@@ -22,7 +23,7 @@
         vim /etc/pacman.conf
 
 - ### install software
-        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux gnome-{shell,calculator} alacritty firefox fcitx5-{im,chinese-addons,mozc} code rnote bottom scrcpy base-devel git clang mold rustup
+        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode base-devel networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-desktop konsole dolphin firefox fcitx5-{im,chinese-addons,mozc} code rnote bottom scrcpy  git clang mold rustup
 
 - ### genfstab
         genfstab -U /mnt >> /mnt/etc/fstab
@@ -92,41 +93,13 @@
       
                 [target.x86_64-unknown-linux-gnu]
                 linker = "clang"
-                rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
-
-        - #### config alacritty
-                mkdir -p .config/alacritty/themes
-                git clone https://github.com/alacritty/alacritty-theme .config/alacritty/themes
-                vi .config/alacritty/alacritty.yml
-          
-            add following things
-          
-              import:
-                - .config/alacritty/themes/themes/tokyo-night-storm.yaml
-              font:
-                size: 12
-
-        - #### edit startx
-              vi startx.sh
-          
-          add following things
-          
-              XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
-              sudo nekoray -many
-              otd-daemon
-     
-          give executable permission
-          
-              chmod +x ./startx.sh
+                rustflags = ["-C", "link-arg=-fuse-ld=/bin/mold"]
 
         - #### install paru
               cd /tmp
               git clone https://aur.archlinux.org/paru.git
               cd paru
               makepkg -si
-
-        - #### install aur software
-              paru -S nekoray sing-geo{site,ip} opentabletdriver
 
         - #### config software
               sudo rmmod wacom
