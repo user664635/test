@@ -23,7 +23,7 @@
         vim /etc/pacman.conf
 
 - ### install software
-        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode base-devel networkmanager nvidia-open-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-{desktop,pa} pipewire-{jack,alsa,audio} konsole dolphin firefox fcitx5-{im,chinese-addons,mozc} code rnote bottom scrcpy  git clang mold rustup
+        pacstrap -K /mnt base linux-{zen{,-headers},firmware} ntfs-3g grub efibootmgr intel-ucode base-devel networkmanager nvidia-dkms fish vim noto-fonts-{cjk,emoji,extra} tmux xorg-{server,xinit} plasma-{desktop,pa} pipewire-{jack,alsa,audio} konsole dolphin firefox fcitx5-{im,chinese-addons,mozc} code rnote bottom scrcpy  git clang mold rustup
 
 - ### genfstab
         genfstab -U /mnt >> /mnt/etc/fstab
@@ -43,8 +43,9 @@
     - #### create link to vim
             ln -s /bin/vim /bin/vi
 
-    - #### enable networkmanager
+    - #### enable system service
             systemctl enable NetworkManager
+            systemctl enable systemd-timesyncd.service
 
     - #### config /etc
             cd /etc
@@ -83,7 +84,7 @@
           passwd username
           su username
           cd
-          echo "export DESKTOP_SESSION=plasma & exec startplasma-x11" > .xinitrc
+          echo "export DESKTOP_SESSION=plasma && exec startplasma-x11" > .xinitrc
 
         - #### install cargo
                 rustup toolchain install nightly
